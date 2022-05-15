@@ -3,7 +3,7 @@
 
 {% block content %}
     <div class="container">
-        <div class="d-grid ms-5 me-5">
+        <div class="d-grid ms-5 me-5 mb-5 mt-5">
             <form method="POST" class="bg-light border border-2">
 
                 {% csrf_token %}
@@ -12,7 +12,7 @@
                     <p class="fs-2 mt-4 me-5 ms-5">Welcome to the <b>Polytechnic University of the PUP</b></p>
                 </div>
                 <div class="d-grid ms-5 me-5">
-                    <p class="fs-6">Enter what type of user you are.</p>
+                    <p class="fs-6 text-center">Enter what type of user you are.</p>
                     <input type="submit" class="btn btn-primary fw-bold" name="btnStudent" value="Student"><br/>
                     <input type="submit" class="btn btn-danger fw-bold" name="btnAdmin" value="Admin">
                 </div>
@@ -21,6 +21,5 @@
                 </div>
             </form>
         </div>
-
     </div>
 {% endblock %}
