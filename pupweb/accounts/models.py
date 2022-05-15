@@ -1,6 +1,7 @@
 from django.utils.translation import gettext_lazy as _
 from django.db import models
 # from django.conf import settings
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.contrib.auth.models import (
     BaseUserManager, AbstractBaseUser
 )
@@ -17,6 +18,7 @@ class UserManager(BaseUserManager):
 
         extra_fields.setdefault('middle_name', '')
         extra_fields.setdefault('address', '')
+        extra_fields.setdefault('mobile_num', '')
 
         user = self.model(
             email=self.normalize_email(email),
@@ -106,9 +108,9 @@ class UserProfile(AbstractBaseUser):
     address = models.CharField(max_length=200, blank=True)
     sex = models.CharField(max_length=1, choices=SexOptions.choices)
     birthday = models.DateField()
-    age = models.IntegerField()
+    age = models.PositiveIntegerField()
     branch = models.CharField(max_length=2, choices=BranchOptions.choices)
-    mobile_num = models.CharField(max_length=11)
+    mobile_num = models.CharField(max_length=11, blank=True)
 
     objects = UserManager()
 
@@ -116,13 +118,22 @@ class UserProfile(AbstractBaseUser):
     REQUIRED_FIELDS = ['email', 'first_name', 'last_name', 'birthday', 'age', 'branch', 'sex', 'is_regular']
 
     def __str__(self):
-        return f'{self.first_name} {self.last_name}'
+        return self.user_id
+
+    def get_id(self):
+        return self.user_id
 
     def get_full_name(self):
-        return f'{self.first_name} {self.middle_name[0]}. {self.last_name}'
+        if self.middle_name:
+            return f'{self.first_name} {self.middle_name[0]}. {self.last_name}'
+        
+        return f'{self.first_name} {self.last_name}'
     
     def get_first_name(self):
         return self.first_name
+
+    def get_last_name(self):
+        return self.last_name
     
     def has_perm(self, perm, obj=None):
         "Does the user have a specific permission?"
@@ -146,12 +157,12 @@ class UserProfile(AbstractBaseUser):
 class Subject(models.Model):
 
     sub_code = models.CharField('Subject Code', max_length=10, null=False, primary_key=True)
-    year_level = models.IntegerField()
+    year_level = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
     description = models.CharField(max_length=120)
-    units = models.IntegerField()
+    units = models.PositiveIntegerField()
 
     def __str__(self):
-        return self.description
+        return self.sub_code
 
 
 class Grades(models.Model):
@@ -160,8 +171,8 @@ class Grades(models.Model):
 
     stud_id = models.ForeignKey(UserProfile, on_delete=models.CASCADE, verbose_name='Student ID', related_name='grades_student')
     sub_code = models.ForeignKey(Subject, on_delete=models.CASCADE, verbose_name='Subject Code')
-    admin_id = models.ForeignKey(UserProfile, on_delete=models.SET_DEFAULT, default='', verbose_name='Faculty', related_name='grades_faculty')
-    final_grade = models.DecimalField(max_digits=3, decimal_places=2)
+    admin_id = models.ForeignKey(UserProfile, on_delete=models.SET_DEFAULT, default='', verbose_name='Faculty ID', related_name='grades_faculty')
+    final_grade = models.DecimalField(max_digits=3, decimal_places=2, validators=[MinValueValidator(1), MaxValueValidator(5)])
 
     def __str__(self):
         return self.final_grade

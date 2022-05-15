@@ -1,0 +1,26 @@
+{% extends 'main/base.html' %}
+{% block title %}{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="d-grid ms-5 me-5">
+            <form method="POST" class="bg-light border border-2">
+
+                {% csrf_token %}
+
+                <div class="d-grid ms-5 me-5">
+                    <p class="fs-2 mt-4 me-5 ms-5">Welcome to the <b>Polytechnic University of the PUP</b></p>
+                </div>
+                <div class="d-grid ms-5 me-5">
+                    <p class="fs-6">Enter what type of user you are.</p>
+                    <input type="submit" class="btn btn-primary fw-bold" name="btnStudent" value="Student"><br/>
+                    <input type="submit" class="btn btn-danger fw-bold" name="btnAdmin" value="Admin">
+                </div>
+                <div class="ms-3 me-3 mt-5 mb-5">
+                    <p class="ms-3 me-3">By using this service, you understand and agree to the PUP Online Services <a href="https://www.pup.edu.ph/terms/" class="text-decoration-none fw-normal">Terms of Use</a> and <a href="https://www.pup.edu.ph/privacy/" class="text-decoration-none fw-normal">Privacy Statement</a>.</p>
+                </div>
+            </form>
+        </div>
+
+    </div>
+{% endblock %}
