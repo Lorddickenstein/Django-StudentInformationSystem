@@ -1,13 +1,49 @@
 {% extends 'main/base.html' %}
+
+{% load static %}
+
 {% block title %}Login{% endblock %}
 
-{% load crispy_forms_tags %}
-
 {% block content %}
-    <form method="POST">
-        {% csrf_token %} <!-- for security measures -->
-        {{ form | crispy }}
-        <p>Don't have an account? Create one <a href="{% url 'main:signup' %}">here.</a></p>
-        <button type="submit" class="btn btn-success">Login</button>
-    </form>
+    <div class="d-flex flex-column justify-content-center align-items-end p-0">
+        <form method="POST" class="login-form font-poppins text-dark">
+            {% csrf_token %}
+            <div class="container mt-5 p-4">
+                <legend class="text-center fw-bold">Login Form</legend><hr />
+                <fieldset>
+                    <div class="mb-3 me-3 ms-3 mt-1">
+                        {% if ctx.user_type == 'student' %}
+                            <label for="student-num" class="form-label">Student Number</label>
+                            <input type="text" class="form-control form-control-sm" id="student-num" name="student-num" maxlength="15" size="15" placeholder="Enter Student Number" required />
+                        {% else %}
+                            <label for="admin-num" class="form-label">Admin Number</label>
+                            <input type="text" class="form-control form-control-sm" id="admin-num" name="admin-num" maxlength="15" size="15" placeholder="Enter Admin Number" required />
+                        {% endif%}
+                    </div>
+                    <div class="m-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control form-control-sm" id="pasword" name="password" placeholder="Enter Password" required />
+                    </div>
+                    <div class="d-grid m-3">
+                        <input type="submit" class="btn btn-primary fw-bold" name="btnLogin" value="Log In" />
+                    </div>
+                    <div class="text-center">
+                        <a href="#" class="text-decoration-none fw-normal">Forgot Password?</a><hr />
+                    </div>
+                    <div class="d-grid w-75 mb-2 mt-4 mx-auto">
+                        <a href="{% url 'main:signup' %}" class="btn btn-success fw-bold">Create an Account</a>
+                    </div>
+                    <div class="d-grid w-75 mx-auto mb-4">
+                        <a href="{% url 'main:index' %}" class="btn btn-danger fw-bold">Not a
+                            {% if ctx.user_type == 'student' %}
+                                Student?
+                            {% else %}
+                                Admin?
+                            {% endif%}
+                        </a>
+                    </div>
+                </fieldset>
+            </div>
+        </form>
+    </div>
 {% endblock %}

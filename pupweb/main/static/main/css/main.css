@@ -1,0 +1,79 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+
+html, body {
+    height: 100vh;
+}
+
+body {
+    background-size: cover;
+	background-attachment: fixed;
+    background-position: center;
+}
+
+.bg-image-index {
+    background-image: url("../img/pup_campus.jpg");
+}
+
+.bg-image-login, .bg-image-signup {
+    background-image: url("../img/pup_gate.jpg")
+}
+
+.index-form-margin {
+    margin: 10vh 0px 10vh 0px;
+}
+
+.index-form-margin form {
+    border-radius: 10px;
+    background-color: white;
+}
+
+.content-height {
+    height: 80vh;
+}
+
+.login-gap, .signup-gap {
+    height: 5vh;
+}
+
+.login-form, .signup-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-content: center;
+
+    min-width: min(90vw, 450px);
+    background-color: rgb(255, 255, 255, 1);
+}
+
+.signup-form {
+    width: 50vw;
+}
+
+.login-field, .signup-field {
+    display: flex;
+    justify-content: space;
+
+    height: auto;
+    max-height: 80vh;
+    min-height: 80vh;
+}
+
+.inner-index-form {
+    max-width: max(40vw, 450px);
+    min-height: 70vh;
+}
+
+.font-poppins {
+    font-family: 'Poppins',sans-serif;
+}
+
+.wrapper {
+    min-height: 100%;
+    height: auto !important;
+    height: 100vh;
+    margin: 0 auto -356px;
+}
+
+.footer, .push {
+    height: 356px;
+}

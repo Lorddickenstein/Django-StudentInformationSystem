@@ -5,53 +5,12 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
 UserProfile = get_user_model()
 
-class RegisterForm(forms.ModelForm):
-    """
-        The default form.
-    """
-
-    password = forms.CharField(widget=forms.PasswordInput)
-    password_2 = forms.CharField(label='Confirm Password', widget=forms.PasswordInput)
-
-    class Meta:
-        model = UserProfile
-        fields = ['email']
-    
-    def clean_email(self):
-        """
-        Verify email is available.
-        """
-        email = self.cleaned_data.get('email')
-        qs = UserProfile.objects.filter(email=email)
-        if qs.exists():
-            raise forms.ValidationError('Email is already taken.')
-
-        return email
-
-    def clean(self):
-        """
-        Verify both passwords match.
-        """
-
-        cleaned_data = super().clean()
-        password = cleaned_data.get('password')
-        password_2 = cleaned_data.get('password_2')
-        if password and password_2 and password != password_2:
-            self.add_error('password_2', 'The passwords do not match.')
-
-        return cleaned_data
-
-
-class UserAdminCreationForm(UserCreationForm):
+class RegisterForm(UserCreationForm):
     """
     A form for creating new users. Includes all the required fields, plus a repeated password.
     """
-    
-    password = forms.CharField(widget=forms.PasswordInput)
-    password_2 = forms.CharField(label='Confirm Password', widget=forms.PasswordInput)
 
     class Meta:
-
         model = UserProfile
         fields = ['first_name', 'middle_name', 'last_name', 'email', 'address', 'sex', 'birthday', 'mobile_num', 'branch', 'is_regular']
 
@@ -73,17 +32,53 @@ class UserAdminCreationForm(UserCreationForm):
         """
 
         cleaned_data = super().clean()
-        password = cleaned_data.get('password')
-        password_2 = cleaned_data.get('password_2')
-        if password and password_2 and password != password_2:
+        password1 = cleaned_data.get('password1')
+        password2 = cleaned_data.get('password2')
+        if password1 and password2 and password1 != password2:
             self.add_error('password_2', 'The passwords do not match.')
         
         return cleaned_data
 
+
+class UserAdminCreationForm(UserCreationForm):
+    """
+    A form for creating new users. Includes all the required fields, plus a repeated password.
+    """
+
+    class Meta:
+        model = UserProfile
+        fields = ['first_name', 'middle_name', 'last_name', 'email', 'address', 'sex', 'birthday', 'mobile_num', 'branch', 'is_regular']
+
+    def clean_email(self):
+        """
+        Verify email is available.
+        """
+
+        email = self.cleaned_data.get('email')
+        qs = UserProfile.objects.filter(email=email)
+        if qs.exists():
+            raise forms.ValidationError('Email is already taken.')
+        
+        return email
+
+    def clean(self):
+        """
+        Verify both passwords match.
+        """
+
+        cleaned_data = super().clean()
+        password1 = cleaned_data.get('password1')
+        password2 = cleaned_data.get('password2')
+        if password1 and password2 and password1 != password2:
+            self.add_error('password_2', 'The passwords do not match.')
+        
+        return cleaned_data
+
+
     def save(self, commit=True):
         # Save the provided password in hashed format
         user = super().save(commit=False)
-        user.set_password(self.cleaned_data['password'])
+        user.set_password(self.cleaned_data['password1'])
         if commit:
             user.save()
         
@@ -99,7 +94,7 @@ class UserAdminChangeForm(forms.ModelForm):
 
     class Meta:
         model = UserProfile
-        fields = ['first_name', 'middle_name', 'last_name', 'email', 'address', 'sex', 'birthday', 'mobile_num', 'branch', 'is_regular', 'password', 'admin', 'is_active']
+        fields = ['first_name', 'middle_name', 'last_name', 'email', 'address', 'sex', 'birthday', 'mobile_num', 'branch', 'is_regular', 'admin', 'is_active']
 
     def clean_password(self):
         """
@@ -125,7 +120,7 @@ class UserAdmin(BaseUserAdmin):
     list_filter = ['admin', 'sex', 'branch']
     fieldsets = (
         (None, {'fields': ('user_id', 'email', 'password')}),
-        ('Personal info', {'fields': ('first_name', 'middle_name', 'last_name,', 'address', 'sex', 'birthday', 'branch', 'is_regular',)}),
+        ('Personal info', {'fields': ('first_name', 'middle_name', 'last_name', 'address', 'sex', 'birthday', 'branch', 'is_regular',)}),
         ('Permission', {'fields': ('admin',)}),
     )
     """

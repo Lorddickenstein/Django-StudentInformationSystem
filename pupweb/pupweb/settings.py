@@ -79,11 +79,11 @@ WSGI_APPLICATION = 'pupweb.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'pupwebsite',
-        'USER': 'postgres',
-        'PASSWORD': 'jerskole13',
-        'HOST': 'localhost',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'sbybebhx',
+        'USER': 'sbybebhx',
+        'PASSWORD': 'Mtu92Byuv2gW1RbIBbNcLdj2qNq-AQu0',
+        'HOST': 'arjuna.db.elephantsql.com',
         'PORT': '5432',
     }
 }
@@ -126,6 +126,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+MEDIA_URL = 'img/'
+
+STATIC_ROOT = BASE_DIR / 'static'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field

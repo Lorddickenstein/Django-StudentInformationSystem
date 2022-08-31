@@ -1,6 +1,5 @@
 from django.utils.translation import gettext_lazy as _
 from django.db import models
-# from django.conf import settings
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.contrib.auth.models import (
     BaseUserManager, AbstractBaseUser
@@ -88,6 +87,7 @@ class UserProfile(AbstractBaseUser):
     class SexOptions(models.TextChoices):
         MALE = 'M', _('Male')
         FEMALE = 'F', _('Female')
+        UNDEFINED = 'U', _('Prefer not to say')
 
     class BranchOptions(models.TextChoices):
         MANILA = 'MN', _('Manila')
@@ -96,7 +96,8 @@ class UserProfile(AbstractBaseUser):
         SAN_JUAN_CITY = 'SJ', _('San Juan City')
         PARANAQUE_CITY = 'PC', _('Paranaque City')
 
-    user_id = models.CharField('User ID', max_length=15, primary_key=True)
+    id = models.AutoField(primary_key=True)
+    user_id = models.CharField('User ID', max_length=15, unique=True)
     email = models.EmailField('Email Address', max_length=120, unique=True)
     is_active = models.BooleanField(default=True)
     staff = models.BooleanField(default=False)
@@ -154,10 +155,44 @@ class UserProfile(AbstractBaseUser):
         return self.admin
 
 
-class Subject(models.Model):
+class Course(models.Model):
+    course_id = models.CharField('Course ID', max_length=20, null=False, primary_key=True)
+    course_name = models.CharField('Course', max_length=50, null=False)
 
+    def get_id(self):
+        return self.id
+
+    def __str__(self):
+        return self.course_name
+
+
+class Department(models.Model):
+    dep_id = models.CharField(max_length=10, primary_key=True)
+    dep_name = models.CharField(max_length=120)
+
+    def get_id(self):
+        return self.dep_id
+
+    def __str__(self):
+        return self.dep_name
+
+
+class Student(models.Model):
+    stud = models.OneToOneField(UserProfile, on_delete=models.CASCADE, verbose_name='Student ID', primary_key=True)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name='Course')
+    year_level = models.PositiveIntegerField('Year Level', validators=[MinValueValidator(1), MaxValueValidator(8)], default=1)
+    section = models.CharField('Section', max_length=10, default='UNENROLLED')
+    dep = models.ForeignKey(Department, on_delete=models.CASCADE, verbose_name='Department')
+
+    def get_id(self):
+        return self.stud_id
+    
+    def __str__(self):
+        return self.stud_id
+
+
+class Subject(models.Model):
     sub_code = models.CharField('Subject Code', max_length=10, null=False, primary_key=True)
-    year_level = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
     description = models.CharField(max_length=120)
     units = models.PositiveIntegerField()
 
@@ -166,40 +201,22 @@ class Subject(models.Model):
 
 
 class Grades(models.Model):
-
-    # User = settings.AUTH_USER_MODEL
-
-    stud_id = models.ForeignKey(UserProfile, on_delete=models.CASCADE, verbose_name='Student ID', related_name='grades_student')
-    sub_code = models.ForeignKey(Subject, on_delete=models.CASCADE, verbose_name='Subject Code')
-    admin_id = models.ForeignKey(UserProfile, on_delete=models.SET_DEFAULT, default='', verbose_name='Faculty ID', related_name='grades_faculty')
-    final_grade = models.DecimalField(max_digits=3, decimal_places=2, validators=[MinValueValidator(1), MaxValueValidator(5)])
+    stud = models.ForeignKey(UserProfile, to_field='user_id', on_delete=models.CASCADE, verbose_name='Student ID', related_name='grades_student')
+    sub = models.ForeignKey(Subject, on_delete=models.CASCADE, verbose_name='Subject Code')
+    admin = models.ForeignKey(UserProfile, to_field='user_id', on_delete=models.SET_DEFAULT, default='', verbose_name='Faculty ID', related_name='grades_faculty')
+    midterm_grade = models.DecimalField(max_digits=3, decimal_places=2, validators=[MinValueValidator(1.0), MaxValueValidator(5.0)], default=0.0)
+    final_grade = models.DecimalField(max_digits=3, decimal_places=2, validators=[MinValueValidator(1.0), MaxValueValidator(5.0)], default=0.0)
+    avg_grade = models.DecimalField(max_digits=3, decimal_places=2, validators=[MinValueValidator(1.0), MaxValueValidator(5.0)], default=0.0)
 
     def __str__(self):
         return self.final_grade
 
 
-class Department(models.Model):
-
-    # Use = settings.AUTH_USER_MODEL
-
-    dep_id = models.CharField(max_length=10, primary_key=True)
-    description = models.CharField(max_length=120)
-
-    def get_id(self):
-        return self.dep_id
-
-    def __str__(self):
-        return self.description
-
-
 class Schedule(models.Model):
-
-    # UserProfile = settings.AUTH_USER_MODEL
-
-    stud_id = models.ForeignKey(UserProfile, on_delete=models.CASCADE, verbose_name='Student ID', related_name='schedule_student')
+    stud = models.ForeignKey(UserProfile, to_field='user_id', on_delete=models.CASCADE, verbose_name='Student ID', related_name='schedule_student')
     day_sched = models.CharField(max_length=5)
     time_sched = models.CharField(max_length=30)
-    admin_id = models.ForeignKey(UserProfile, on_delete=models.SET_DEFAULT, default='', verbose_name='Faculty', related_name='schedule_faculty')
+    admin = models.ForeignKey(UserProfile, to_field='user_id', on_delete=models.SET_DEFAULT, default='', verbose_name='Faculty', related_name='schedule_faculty')
 
     def __str__(self):
         return f'{self.day_sched} {self.time_sched}'
