@@ -18,13 +18,22 @@ body {
     background-image: url("../img/pup_gate.jpg")
 }
 
-.index-form-margin {
+.index-form {
     margin: 10vh 0px 10vh 0px;
 }
 
-.index-form-margin form {
+.index-form form {
     border-radius: 10px;
     background-color: white;
+}
+
+.index-field {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    max-width: max(40vw, 450px);
+    min-height: 70vh;
 }
 
 .content-height {
@@ -41,8 +50,13 @@ body {
     justify-content: start;
     align-content: center;
 
+    height: 100%;
     min-width: min(90vw, 450px);
     background-color: rgb(255, 255, 255, 1);
+}
+
+.login-form {
+    width: 40vw;
 }
 
 .signup-form {
@@ -51,18 +65,13 @@ body {
 
 .login-field, .signup-field {
     display: flex;
-    justify-content: space;
+    flex-direction: column;
+    justify-content: start;
 
-    height: auto;
-    max-height: 80vh;
+    margin: 3vh auto 3vh auto;
+    height: 100%;
     min-height: 80vh;
 }
-
-.inner-index-form {
-    max-width: max(40vw, 450px);
-    min-height: 70vh;
-}
-
 .font-poppins {
     font-family: 'Poppins',sans-serif;
 }

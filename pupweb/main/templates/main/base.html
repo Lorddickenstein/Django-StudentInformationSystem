@@ -25,7 +25,7 @@
             <nav class="navbar navbar-dark bg-danger navbar-expand-lg sticky-top ">
                 <div class="container-fluid me-4 font-poppins">
                     <a class="navbar-brand fs-3" href="{% if user.is_authenticated %}{% url 'main:home' %}{% else %}{% url 'main:index' %}{% endif %}">
-                        <img src="{% static 'media/pup_logo.png' %}" alt="pup logo" width=45 height="auto">
+                        <img src="{% static 'main/img/pup_logo.png' %}" alt="pup logo" width=45 height="auto">
                         Polytechnic University of the PUP
                     </a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
@@ -34,44 +34,52 @@
                     <div>
                         <div class="collapse navbar-collapse" id="navbarContent">
                             <ul class="navbar-nav me-auto mb-2 mb-lg-0 fs-5">
-                            {% set ctx.active as active_page %}
                                 
                             {% if ctx.user_type != "none" %}
-                                {% if user.is_authenticated %}
-                                    {% to_list "main:grade grade Grade" 
-                                    "main:schedule schedule Schedule" "main:home home Home" as nav_bar %}
-                                    {% if ctx.user_type == "student" %}
-                                        {% add nav_bar "main:enrollment enrollment Enrollment" as nav_bar %}
+
+                                {% with request.resolver_match.url_name as url_name %}
+
+                                    {% if user.is_authenticated %}
+                                        
+                                        <li class="nav-item">
+                                            <a class="nav-link {% if url_name == 'home' %}active{% endif %}" href="{% url 'main:home' %}">Home</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link {% if url_name == 'grade' %}active{% endif %}" href="{% url 'main:grade' %}">Grade</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link {% if url_name == 'schedule' %}active{% endif %}" href="{% url 'main:schedule' %}">Schedule</a>
+                                        </li>
+                                        
+                                        {% if ctx.user_type == "student" %}
+                                            <li class="nav-item">
+                                                <a class="nav-link {% if url_name == 'enrollment' %}active{% endif %}" href="{% url 'main:enrollment' %}">Enrollment</a>
+                                            </li>
+                                        {% elif ctx.user_type == "admin" %}
+                                            <li class="nav-item">
+                                                <a class="nav-link {% if url_name == 'students-list' %}active{% endif %}" href="{% url 'main:students_list' %}">Students List</a>
+                                            </li>
+                                        {% endif %}
+
+                                        <li class="nav-item dropdown">
+                                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{ user.first_name }}</a>
+                                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                                <li><a class="dropdown-item" href="#">Account</a></li>
+                                                <li><a class="dropdown-item" href="#">Preference</a></li>
+                                                <li><a class="dropdown-item" href="#">Settings</a></li>
+                                                <li><hr class="dropdown-divider"></li>
+                                                <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                                            </ul>
+                                        </li>
                                     {% else %}
-                                        {% add nav_bar "main:students_list students-list 'Students List'" as nav_bar %}
+                                        <li class="nav-item">
+                                            <a class="nav-link {% if url_name == 'login' %}active{% endif %}" href="{% url 'main:login' %}">Login</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link {% if url_name == 'signup' %}active{% endif %}" href="{% url 'main:signup' %}">Signup</a>
+                                        </li>
                                     {% endif %}
-
-                                    {% for href, id, caption in nav_bar %}
-                                        <li class="nav-item">
-                                            <a class="nav-link {% if id == active_page %}active{% endif %}" href="{% url href %}">{{ caption }}</a>
-                                        </li>
-                                    {% endfor %}
-                                    <li class="nav-item dropdown">
-                                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">John Doe</a>
-                                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                            <li><a class="dropdown-item" href="#">Account</a></li>
-                                            <li><a class="dropdown-item" href="#">Preference</a></li>
-                                            <li><a class="dropdown-item" href="#">Settings</a></li>
-                                            <li><hr class="dropdown-divider"></li>
-                                            <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
-                                        </ul>
-                                    </li>
-                                {% else %}
-                                    {% to_list "main:login login Login" "main:signup signup Signup" as nav_bar %}
-
-                                    {% set ctx.active as active_page %}
-
-                                    {% for href, id, caption in nav_bar %}
-                                        <li class="nav-item">
-                                            <a class="nav-link {% if id == active_page %}active{% endif %}" href="{% url href %}">{{ caption }}</a>
-                                        </li>
-                                    {% endfor %}
-                                {% endif %}
+                                {% endwith %}
                             {% endif %}
                         </div>
                     </div>
@@ -137,7 +145,9 @@
                                 <p>
                                     <i class="fa-solid fa-house"></i>&nbsp&nbspQuezon City, NCR, 1123, PH
                                 </p>
-                                <p><i class="fa-solid fa-envelope"></i>&nbsp&nbspjersondestacamento@gmail.com</p>
+                                <p>
+                                    <i class="fa-solid fa-envelope"></i>&nbsp&nbsp<a href="mailto:jersondestacamento@gmail.com" class="text-decoration-none text-light">jersondestacamento@gmail.com</a>
+                                </p>
                                 <p>
                                     <i class="fa-solid fa-mobile-screen-button"></i>&nbsp&nbsp+63999-9541-653
                                 </p>

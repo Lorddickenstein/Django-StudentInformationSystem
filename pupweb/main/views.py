@@ -28,10 +28,13 @@ def index(request):
     return render(request, 'main/index.html', {'ctx': ctx})
 
 
-def signup(request):
-    user_type = request.session['user_type']
-    ctx = {'user_type': user_type, 'bg_img': 'bg-image-signup', 'active': 'signup'}
 
+def signup(request):
+    # TODO: Finish signup view
+    user_type = request.session['user_type']
+    ctx = {'user_type': user_type, 'bg_img': 'bg-image-signup'}
+
+    # BUG: form does not exist, remove forms
     if user_type == 'none':
         return redirect('/')
 
@@ -70,8 +73,6 @@ def signup(request):
                 login(request, user)
 
                 return redirect('/home')
-            
-    form = RegisterForm()
 
     return render(request, 'registration/signup.html', {'ctx': ctx})
 
@@ -79,7 +80,7 @@ def signup(request):
 def login_view(request):
     user_type = request.session['user_type']
 
-    ctx = {'user_type': user_type, 'bg_img': 'bg-image-login', 'active': 'login'}
+    ctx = {'user_type': user_type, 'bg_img': 'bg-image-login'}
 
     if request.method == 'POST':
         if user_type == 'student':
@@ -102,6 +103,7 @@ def login_view(request):
     
 @login_required(login_url='/')
 def home(request):
+    # TODO: Design my home view, make it like a twitter or something
     user_type = request.session['user_type']
 
     return render(request, 'main/home.html', {'user_type': user_type})
@@ -109,16 +111,19 @@ def home(request):
 
 @login_required(login_url='/')
 def grade(request):
+    # TODO: Create functionality with grade page
     pass
 
 
 @login_required(login_url='/')
 def enrollment(request):
+    # TODO: Create fnctionality with enrollment page
     pass
 
 
 @login_required(login_url='/')
 def schedule(request):
+    # TODO: Create functionality with schedule page
     pass
 
 

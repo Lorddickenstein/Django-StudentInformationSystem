@@ -5,15 +5,12 @@
 {% block title %}{% endblock %}
 
 {% block content %}
-    <div class="index-form-margin d-flex flex-column justify-content-center align-items-center p-0">
-
-        <form method="POST" class="border border-2">
-
-            {% csrf_token %}
-
-            <div class="container overflow-auto">
-                <div class="inner-index-form d-flex flex-column justify-content-between text-center font-poppins overflow-auto">
-                    <div class="text-center mt-3">
+    <div class="d-flex flex-column justify-content-center align-items-center p-0">
+        <div class="index-form">
+            <form method="POST" class="border border-2">
+                {% csrf_token %}
+                <div class="index-field font-poppins text-center">
+                    <div class="mt-5">
                         <img src="{% static 'main/img/pup.png' %}" alt="pup" width=100 height="auto">
                         <p class="fs-2 mt-4 me-5 ms-5">Welcome to the <b>Polytechnic University of the PUP</b></p>
                     </div>
@@ -22,10 +19,11 @@
                         <input type="submit" class="btn btn-primary fw-bold w-75 mb-1" name="btnStudent" value="Student">
                         <input type="submit" class="btn btn-danger fw-bold w-75 mt-1" name="btnAdmin" value="Admin">
                     </div>
-                    <p class="ms-3 me-3">By using this service, you understand and agree to the PUP Online Services <a href="https://www.pup.edu.ph/terms/" class="text-decoration-none fw-normal">Terms of Use</a> and <a href="https://www.pup.edu.ph/privacy/" class="text-decoration-none fw-normal">Privacy Statement</a>.</p>
+                    <div class="mx-3 mt-5 mb-4">
+                        <p class="mx-3">By using this service, you understand and agree to the PUP Online Services <a href="https://www.pup.edu.ph/terms/" class="text-decoration-none fw-normal">Terms of Use</a> and <a href="https://www.pup.edu.ph/privacy/" class="text-decoration-none fw-normal">Privacy Statement</a>.</p>
+                    </div>
                 </div>
-            </div>
-        </form>
-        
+            </form>
+        </div>
     </div>
 {% endblock %}

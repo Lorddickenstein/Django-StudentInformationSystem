@@ -1,3 +1,6 @@
+pupweb\pupweb\__pycache__
+
 pupweb\accounts\__pycache__
 pupweb\main\__pycache__
-Django-StudentInformationSystem\pupweb\main\migrations\__pycache__
+
+pupweb\main\migrations\__pycache__
