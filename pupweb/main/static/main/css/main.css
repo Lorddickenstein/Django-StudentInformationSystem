@@ -36,10 +36,6 @@ body {
     min-height: 70vh;
 }
 
-.content-height {
-    height: 80vh;
-}
-
 .login-gap, .signup-gap {
     height: 5vh;
 }
@@ -72,6 +68,29 @@ body {
     height: 100%;
     min-height: 80vh;
 }
+
+.home-feed {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-content: center;
+    align-items: center;
+
+    margin: 3vh auto 3vh 2vw;
+    height: 100%;
+    min-height: 80vh;
+    width: 70vw;
+}
+
+.news-feed {
+    margin: 3vh 2vw 3vh 2vw;
+    border: 2px solid black;
+    border-radius: 15px;
+    height: 100%;
+    min-height: 80vh;
+    width: 30vw;
+}
+
 .font-poppins {
     font-family: 'Poppins',sans-serif;
 }
